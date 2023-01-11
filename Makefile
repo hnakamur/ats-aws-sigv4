@@ -24,6 +24,9 @@ AWS_SIG_V4_OBJS = objs/aws-sigv4/sigv4.o \
 objs/aws-sigv4/libsigv4.so: $(AWS_SIG_V4_OBJS)
 	 $(LINK) -o $@ $^ -shared
 
+format:
+	ls src/*.[ch] | xargs clang-format -i -style=file
+
 objs/aws-sigv4/sigv4.o: dep/aws-sigv4/sigv4.c $(AWS_SIG_V4_HDRS)
 	@mkdir -p objs/aws-sigv4
 	$(CC) -c $(CFLAGS) -o $@ $<
