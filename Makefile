@@ -8,7 +8,8 @@ WARNING_FLAGS = -Wall -Wno-unused-value -Wno-unused-function -Wno-nullability-co
 COMMON_CFLAGS = $(INCS) -pipe $(WARNING_FLAGS)
 COV_FLAGS = -fprofile-instr-generate -fcoverage-mapping
 
-CFLAGS = -O2 -fPIC $(COMMON_CFLAGS)
+CFLAGS = -O2 -fPIC $(COMMON_CFLAGS) $(shell pkg-config --cflags libsodium)
+LDFLAGS = $(shell pkg-config --libs libsodium)
 
 AWS_SIG_V4_HDRS = dep/aws-sigv4/include/sigv4_config_defaults.h \
                   dep/aws-sigv4/include/sigv4.h \
@@ -28,8 +29,8 @@ MY_OBJS = objs/generate_signature.o
 
 OBJS = $(MY_OBJS) $(AWS_SIG_V4_OBJS)
 
-objs/aws-sigv4/libsigv4.so: $(OBJS)
-	 $(LINK) -o $@ $^ -shared
+objs/libgenawssigv4.so: $(OBJS)
+	 $(LINK) -o $@ $^ -shared $(LDFLAGS)
 
 format:
 	ls src/*.[ch] | xargs clang-format -i -style=file

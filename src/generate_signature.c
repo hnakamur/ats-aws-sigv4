@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <openssl/evp.h>
+#include <sodium.h>
 
 #include "generate_signature.h"
 #include "sigv4.h"
@@ -24,23 +24,17 @@
  */
 #define SHA256_HASH_DIGEST_LENGTH (HEX_ENCODED_SHA256_HASH_DIGEST_LENGTH / 2)
 
-typedef struct {
-    EVP_MD_CTX *mdctx;
-} sha256_ctx_t;
-
 static int32_t sha256Init(void *hashContext)
 {
-    sha256_ctx_t *ctx = (sha256_ctx_t *)hashContext;
-    ctx->mdctx = EVP_MD_CTX_new();
-    const EVP_MD *md = EVP_sha256();
-    return (int32_t)EVP_DigestInit(ctx->mdctx, md);
+    crypto_hash_sha256_state *state = (crypto_hash_sha256_state *)hashContext;
+    return (int32_t)crypto_hash_sha256_init(state);
 }
 
 static int32_t sha256Update(void *hashContext, const uint8_t *pInput,
                             size_t inputLen)
 {
-    sha256_ctx_t *ctx = (sha256_ctx_t *)hashContext;
-    return (int32_t)EVP_DigestUpdate(ctx->mdctx, pInput, inputLen);
+    crypto_hash_sha256_state *state = (crypto_hash_sha256_state *)hashContext;
+    return crypto_hash_sha256_update(state, pInput, inputLen);
 }
 
 static int32_t sha256Final(void *hashContext, uint8_t *pOutput,
@@ -50,10 +44,8 @@ static int32_t sha256Final(void *hashContext, uint8_t *pOutput,
 
     (void)outputLen;
 
-    sha256_ctx_t *ctx = (sha256_ctx_t *)hashContext;
-    int rc = EVP_DigestFinal_ex(ctx->mdctx, pOutput, NULL);
-    EVP_MD_CTX_free(ctx->mdctx);
-    return (int32_t)rc;
+    crypto_hash_sha256_state *state = (crypto_hash_sha256_state *)hashContext;
+    return crypto_hash_sha256_final(state, pOutput);
 }
 
 int generate_signature(generate_signature_params_t *param)
@@ -65,7 +57,7 @@ int generate_signature(generate_signature_params_t *param)
         .secretAccessKeyLen = param->secret_access_key_len,
     };
 
-    sha256_ctx_t hashContext;
+    crypto_hash_sha256_state hashContext;
     SigV4CryptoInterface_t cryptoInterface = {
         .hashInit = sha256Init,
         .hashUpdate = sha256Update,
