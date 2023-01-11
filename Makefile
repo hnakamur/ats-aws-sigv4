@@ -1,0 +1,36 @@
+CC =       clang
+LINK =     $(CC)
+COV =      llvm-cov
+PROFDATA = llvm-profdata
+
+INCS = -Isrc -Idep/aws-sigv4/include
+WARNING_FLAGS = -Wall -Wno-unused-value -Wno-unused-function -Wno-nullability-completeness -Wno-expansion-to-defined -Werror=implicit-function-declaration -Werror=incompatible-pointer-types
+COMMON_CFLAGS = $(INCS) -pipe $(WARNING_FLAGS)
+COV_FLAGS = -fprofile-instr-generate -fcoverage-mapping
+
+CFLAGS = -O2 -fPIC $(COMMON_CFLAGS)
+
+AWS_SIG_V4_HDRS = dep/aws-sigv4/include/sigv4_config_defaults.h \
+                  dep/aws-sigv4/include/sigv4.h \
+                  dep/aws-sigv4/include/sigv4_internal.h \
+                  dep/aws-sigv4/include/sigv4_quicksort.h
+
+AWS_SIG_V4_SRCS = dep/aws-sigv4/sigv4.c \
+                  dep/aws-sigv4/sigv4_quicksort.c
+
+AWS_SIG_V4_OBJS = objs/aws-sigv4/sigv4.o \
+                  objs/aws-sigv4/sigv4_quicksort.o
+
+objs/aws-sigv4/libsigv4.so: $(AWS_SIG_V4_OBJS)
+	 $(LINK) -o $@ $^ -shared
+
+objs/aws-sigv4/sigv4.o: dep/aws-sigv4/sigv4.c $(AWS_SIG_V4_HDRS)
+	@mkdir -p objs/aws-sigv4
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+objs/aws-sigv4/sigv4_quicksort.o: dep/aws-sigv4/sigv4_quicksort.c $(AWS_SIG_V4_HDRS)
+	@mkdir -p objs/aws-sigv4
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+clean:
+	@rm -rf objs
