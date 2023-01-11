@@ -21,11 +21,21 @@ AWS_SIG_V4_SRCS = dep/aws-sigv4/sigv4.c \
 AWS_SIG_V4_OBJS = objs/aws-sigv4/sigv4.o \
                   objs/aws-sigv4/sigv4_quicksort.o
 
-objs/aws-sigv4/libsigv4.so: $(AWS_SIG_V4_OBJS)
+MY_HDRS = src/sigv4_config.h
+
+MY_OBJS = objs/server_request.o
+
+OBJS = $(MY_OBJS) $(AWS_SIG_V4_OBJS)
+
+objs/aws-sigv4/libsigv4.so: $(OBJS)
 	 $(LINK) -o $@ $^ -shared
 
 format:
 	ls src/*.[ch] | xargs clang-format -i -style=file
+
+objs/server_request.o: src/server_request.c $(MY_HDRS) $(AWS_SIG_V4_HDRS)
+	@mkdir -p objs
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 objs/aws-sigv4/sigv4.o: dep/aws-sigv4/sigv4.c $(AWS_SIG_V4_HDRS)
 	@mkdir -p objs/aws-sigv4
