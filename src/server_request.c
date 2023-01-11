@@ -65,19 +65,11 @@ static int32_t sha256Final(void *hashContext, uint8_t *pOutput,
 static size_t sigv4AuthLen = AWS_HTTP_AUTH_HEADER_VALUE_LEN;
 
 void f(const char *region, size_t region_len, const char *method,
-       size_t method_len, const char *url_path, size_t url_path_len)
+       size_t method_len, const char *url_path, size_t url_path_len,
+       const char *headers, size_t headers_len)
 {
     SigV4Status_t sigv4Status = SigV4Success;
     SigV4HttpParameters_t sigv4HttpParams;
-
-    char *pHeaders = NULL;
-    size_t headersLen = 0;
-
-#if 0
-    /* Move request header pointer past the initial headers which are added by coreHTTP
-     * library and are not required by SigV4 library. */
-    getHeaderStartLocFromHttpRequest( requestHeaders, &pHeaders, &headersLen );
-#endif
 
     /* Store Signature used in AWS HTTP requests generated using SigV4 library.
      */
@@ -119,8 +111,8 @@ void f(const char *region, size_t region_len, const char *method,
     /* AWS S3 request does not require any Query parameters. */
     sigv4HttpParams.pQuery = NULL;
     sigv4HttpParams.queryLen = 0;
-    sigv4HttpParams.pHeaders = pHeaders;
-    sigv4HttpParams.headersLen = headersLen;
+    sigv4HttpParams.pHeaders = headers;
+    sigv4HttpParams.headersLen = headers_len;
     sigv4HttpParams.pPayload = S3_REQUEST_EMPTY_PAYLOAD;
     sigv4HttpParams.payloadLen = strlen(S3_REQUEST_EMPTY_PAYLOAD);
 
