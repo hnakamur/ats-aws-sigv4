@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <sodium.h>
 
-#include "generate_signature.h"
+#include "generate_aws_sigv4.h"
 #include "sigv4.h"
 
 /**
@@ -48,7 +48,7 @@ static int32_t sha256Final(void *hashContext, uint8_t *pOutput,
     return crypto_hash_sha256_final(state, pOutput);
 }
 
-int generate_signature(generate_signature_params_t *param)
+int generate_aws_sigv4(generate_aws_sigv4_params_t *param)
 {
     SigV4Credentials_t sigvCreds = {
         .pAccessKeyId = param->access_key_id,

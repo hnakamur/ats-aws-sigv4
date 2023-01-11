@@ -1,5 +1,5 @@
-#ifndef GENERATE_SIGNATURE_H_
-#define GENERATE_SIGNATURE_H_
+#ifndef GENERATE_AWS_SIGV4_H_
+#define GENERATE_AWS_SIGV4_H_
 
 #include <stddef.h>
 
@@ -34,8 +34,8 @@ typedef struct {
     char *signature; /* points to somewhere in auth_buf. */
     size_t signature_len;
 
-} generate_signature_params_t;
+} generate_aws_sigv4_params_t;
 
-int generate_signature(generate_signature_params_t *param);
+int generate_aws_sigv4(generate_aws_sigv4_params_t *param);
 
-#endif /* ifndef GENERATE_SIGNATURE_H_ */
+#endif /* ifndef GENERATE_AWS_SIGV4_H_ */
