@@ -12,10 +12,10 @@ typedef struct {
     const char *secret_access_key;
     size_t secret_access_key_len;
 
-    const char *data_iso8601; /* YYYYMMDD */
-
     const char *region;
     size_t region_len;
+
+    const char *data_iso8601; /* YYYYMMDD */
 
     const char *method;
     size_t method_len;
@@ -28,7 +28,7 @@ typedef struct {
 
     /* output parameters */
 
-    char *auth_buf; /* caller must provide memory. */
+    char *auth_buf; /* caller must provide memory (ex. 2048 bytes). */
     size_t auth_buf_len;
 
     char *signature; /* points to somewhere in auth_buf. */

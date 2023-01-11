@@ -24,12 +24,6 @@
  */
 #define SHA256_HASH_DIGEST_LENGTH (HEX_ENCODED_SHA256_HASH_DIGEST_LENGTH / 2)
 
-/**
- * @brief Length of AWS HTTP Authorization header value generated using SigV4
- * library.
- */
-#define AWS_HTTP_AUTH_HEADER_VALUE_LEN 2048U
-
 typedef struct {
     EVP_MD_CTX *mdctx;
 } sha256_ctx_t;
