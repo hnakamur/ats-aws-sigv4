@@ -21,9 +21,10 @@ AWS_SIG_V4_SRCS = dep/aws-sigv4/sigv4.c \
 AWS_SIG_V4_OBJS = objs/aws-sigv4/sigv4.o \
                   objs/aws-sigv4/sigv4_quicksort.o
 
-MY_HDRS = src/sigv4_config.h
+MY_HDRS = src/generate_signature.h \
+          src/sigv4_config.h
 
-MY_OBJS = objs/server_request.o
+MY_OBJS = objs/generate_signature.o
 
 OBJS = $(MY_OBJS) $(AWS_SIG_V4_OBJS)
 
@@ -33,7 +34,7 @@ objs/aws-sigv4/libsigv4.so: $(OBJS)
 format:
 	ls src/*.[ch] | xargs clang-format -i -style=file
 
-objs/server_request.o: src/server_request.c $(MY_HDRS) $(AWS_SIG_V4_HDRS)
+objs/generate_signature.o: src/generate_signature.c $(MY_HDRS) $(AWS_SIG_V4_HDRS)
 	@mkdir -p objs
 	$(CC) -c $(CFLAGS) -o $@ $<
 
