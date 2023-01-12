@@ -1,5 +1,7 @@
 #include <assert.h>
 #include <sodium.h>
+#include <stdio.h>
+#include <time.h>
 
 #include "generate_aws_sigv4.h"
 #include "sigv4.h"
@@ -99,4 +101,16 @@ int generate_aws_sigv4(generate_aws_sigv4_params_t *param)
         &sigv4Params, param->auth_buf, &param->auth_buf_len, &param->signature,
         &param->signature_len);
     return sigv4Status != SigV4Success;
+}
+
+void sprint_iso8601_date(char *out, double abs_time)
+{
+    time_t t;
+    struct tm tm, *p;
+
+    t = (time_t)abs_time;
+    p = gmtime_r(&t, &tm);
+    snprintf(out, sizeof("YYYYmmDDTHHMMSSZ"), "%04d%02d%02dT%02d%02d%02dZ",
+             1900 + p->tm_year, p->tm_mon, p->tm_mday, p->tm_hour, p->tm_min,
+             p->tm_sec);
 }
