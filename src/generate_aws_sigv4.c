@@ -86,7 +86,7 @@ int generate_aws_sigv4(generate_aws_sigv4_params_t *param)
 
     SigV4Parameters_t sigv4Params = {
         .pCredentials = &sigvCreds,
-        .pDateIso8601 = param->data_iso8601,
+        .pDateIso8601 = param->date_iso8601,
         .pRegion = param->region,
         .regionLen = param->region_len,
         .pService = AWS_S3_SERVICE_NAME,
@@ -98,5 +98,5 @@ int generate_aws_sigv4(generate_aws_sigv4_params_t *param)
     SigV4Status_t sigv4Status = SigV4_GenerateHTTPAuthorization(
         &sigv4Params, param->auth_buf, &param->auth_buf_len, &param->signature,
         &param->signature_len);
-    return sigv4Status == SigV4Success;
+    return sigv4Status != SigV4Success;
 }

@@ -29,6 +29,16 @@ MY_OBJS = objs/generate_aws_sigv4.o
 
 OBJS = $(MY_OBJS) $(AWS_SIG_V4_OBJS)
 
+LUA_FILES = genawssigv4.lua
+
+SHLIBS = objs/libgenawssigv4.so
+
+build: $(SHLIBS)
+
+install: $(SHLIBS)
+	sudo install $(SHLIBS) /usr/lib/x86_64-linux-gnu/
+	sudo install $(LUA_FILES) /usr/local/share/lua/5.1/
+
 objs/libgenawssigv4.so: $(OBJS)
 	 $(LINK) -o $@ $^ -shared $(LDFLAGS)
 

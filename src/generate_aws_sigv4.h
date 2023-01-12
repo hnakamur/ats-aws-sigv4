@@ -15,7 +15,7 @@ typedef struct {
     const char *region;
     size_t region_len;
 
-    const char *data_iso8601; /* YYYYMMDD */
+    const char *date_iso8601; /* YYYYMMDD */
 
     const char *method;
     size_t method_len;
