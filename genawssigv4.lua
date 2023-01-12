@@ -3,6 +3,7 @@ local S = ffi.load("genawssigv4")
 
 ffi.cdef[[
     typedef uint64_t size_t;
+    typedef int64_t time_t;
 
     typedef struct {
         /* input parameters */
@@ -39,7 +40,7 @@ ffi.cdef[[
     
     int generate_aws_sigv4(generate_aws_sigv4_params_t *param);
 
-    void sprint_iso8601_date(char *out, double abs_time);
+    void sprint_iso8601_date(char *out, time_t utc_time);
 ]]
 
 local c_buf_type = ffi.typeof("char[?]")
@@ -73,9 +74,12 @@ local function generate_aws_sigv4(access_key_id, secret_access_key, region, date
 end
 
 local function format_iso8601_date(abs_num_time)
+    local utc_time = ffi.new("time_t")
+    utc_time = math.floor(abs_num_time)
+
     local date_iso8601_len = 16
     local date_buf = ffi.new(c_buf_type, date_iso8601_len + 1) -- 1 for '\0'
-    S.sprint_iso8601_date(date_buf, math.floor(abs_num_time))
+    S.sprint_iso8601_date(date_buf, utc_time)
     return ffi.string(date_buf, date_iso8601_len)
 end
 

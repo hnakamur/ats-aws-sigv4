@@ -103,13 +103,11 @@ int generate_aws_sigv4(generate_aws_sigv4_params_t *param)
     return sigv4Status != SigV4Success;
 }
 
-void sprint_iso8601_date(char *out, double abs_time)
+void sprint_iso8601_date(char *out, time_t utc_time)
 {
-    time_t t;
     struct tm tm, *p;
 
-    t = (time_t)abs_time;
-    p = gmtime_r(&t, &tm);
+    p = gmtime_r(&utc_time, &tm);
     snprintf(out, sizeof("YYYYmmDDTHHMMSSZ"), "%04d%02d%02dT%02d%02d%02dZ",
              1900 + p->tm_year, p->tm_mon, p->tm_mday, p->tm_hour, p->tm_min,
              p->tm_sec);

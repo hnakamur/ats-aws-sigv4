@@ -2,6 +2,7 @@
 #define GENERATE_AWS_SIGV4_H_
 
 #include <stddef.h>
+#include <time.h>
 
 typedef struct {
     /* input parameters */
@@ -39,6 +40,6 @@ typedef struct {
 int generate_aws_sigv4(generate_aws_sigv4_params_t *param);
 
 /* caller must provide memory for out with 17 bytes (YYYYmmDDTHHMMSSZ + '\0') */
-void sprint_iso8601_date(char *out, double abs_time);
+void sprint_iso8601_date(char *out, time_t utc_time);
 
 #endif /* ifndef GENERATE_AWS_SIGV4_H_ */

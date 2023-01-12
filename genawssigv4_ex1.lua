@@ -2,7 +2,7 @@ local genawssigv4 = require "genawssigv4"
 
 local now = os.time()
 local date_iso8601 = genawssigv4.format_iso8601_date(now)
--- print(string.format("date_iso8601=%s", date_iso8601))
+print(string.format("date_iso8601=%s", date_iso8601))
 local date = string.sub(date_iso8601, 1, 8)
 
 local access_key_id = "AKIAIOSFODNN7EXAMPLE"
