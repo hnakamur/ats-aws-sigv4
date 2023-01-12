@@ -29,7 +29,8 @@ MY_OBJS = objs/generate_aws_sigv4.o
 
 OBJS = $(MY_OBJS) $(AWS_SIG_V4_OBJS)
 
-LUA_FILES = genawssigv4.lua
+LUA_FILES = atsgenawssigv4.lua \
+            genawssigv4.lua
 
 SHLIBS = objs/libgenawssigv4.so
 
