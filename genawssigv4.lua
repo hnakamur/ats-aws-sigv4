@@ -60,18 +60,15 @@ local function generate_aws_sigv4(access_key_id, secret_access_key, region, date
     params[0].headers_len = #headers
 
     local auth_buf_len = 2048
-    local signature = ffi.new("char *[1]")
     params[0].auth_buf = ffi.new(c_buf_type, auth_buf_len)
     params[0].auth_buf_len = auth_buf_len
-    params[0].signature = signature[0]
-    params[0].signature_len = 0
+
     local rc = S.generate_aws_sigv4(params[0])
     if rc ~= 0 then
-        return nil, nil, "failed to generate signature"
+        return nil, "failed to generate signature"
     end
     local authorization = ffi.string(params[0].auth_buf, params[0].auth_buf_len)
-    local sig = ffi.string(params[0].signature, params[0].signature_len)
-    return authorization, sig
+    return authorization
 end
 
 return {
