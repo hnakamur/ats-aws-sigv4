@@ -24,7 +24,10 @@ ffi.cdef[[
     
         const char *url_path;
         size_t url_path_len;
-    
+
+        const char *query;
+        size_t query_len;
+
         const char *headers;
         size_t headers_len;
     
@@ -40,12 +43,13 @@ ffi.cdef[[
     
     int generate_aws_sigv4(generate_aws_sigv4_params_t *param);
 
+    /* caller must provide memory for out with 17 bytes (YYYYmmDDTHHMMSSZ + '\0') */
     void sprint_iso8601_date(char *out, time_t utc_time);
 ]]
 
 local c_buf_type = ffi.typeof("char[?]")
 
-local function generate_aws_sigv4(access_key_id, secret_access_key, region, date_iso8601, method, url_path, headers)
+local function generate_aws_sigv4(access_key_id, secret_access_key, region, date_iso8601, method, url_path, query, headers)
     local params = ffi.new("generate_aws_sigv4_params_t[1]")
     params[0].access_key_id = access_key_id
     params[0].access_key_id_len = #access_key_id
@@ -57,7 +61,17 @@ local function generate_aws_sigv4(access_key_id, secret_access_key, region, date
     params[0].method = method
     params[0].method_len = #method
     params[0].url_path = url_path
-    params[0].url_path_len = #url_path
+    if url_path == nil then
+        params[0].url_path_len = 0
+    else
+        params[0].url_path_len = #url_path
+    end
+    params[0].query = query
+    if query == nil then
+        params[0].query_len = 0
+    else
+        params[0].query_len = #query
+    end
     params[0].headers = headers
     params[0].headers_len = #headers
 

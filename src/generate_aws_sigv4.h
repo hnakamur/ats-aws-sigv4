@@ -24,6 +24,9 @@ typedef struct {
     const char *url_path;
     size_t url_path_len;
 
+    const char *query;
+    size_t query_len;
+
     const char *headers;
     size_t headers_len;
 
