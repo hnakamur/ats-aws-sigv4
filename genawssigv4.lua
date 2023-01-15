@@ -17,7 +17,7 @@ ffi.cdef[[
         const char *region;
         size_t region_len;
     
-        const char *date_iso8601; /* YYYYMMDD */
+        const char *date_iso8601; /* YYYYmmddTHHMMSSZ */
     
         const char *method;
         size_t method_len;
@@ -43,7 +43,7 @@ ffi.cdef[[
     
     int generate_aws_sigv4(generate_aws_sigv4_params_t *param);
 
-    /* caller must provide memory for out with 17 bytes (YYYYmmDDTHHMMSSZ + '\0') */
+    /* caller must provide memory for out with 17 bytes (YYYYmmddTHHMMSSZ + '\0') */
     void sprint_iso8601_date(char *out, time_t utc_time);
 ]]
 
