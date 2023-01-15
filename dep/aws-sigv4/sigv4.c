@@ -3228,6 +3228,10 @@ SigV4Status_t SigV4_GenerateHTTPAuthorization( const SigV4Parameters_t * pParams
         LogDebug( ( "Generated Canonical Request: %.*s",
                     ( unsigned int ) ( ( uint8_t * ) canonicalContext.pBufCur - canonicalContext.pBufProcessing ),
                     canonicalContext.pBufProcessing ) );
+        fprintf( stderr, "sigv4 Generated Canonical Request: %.*s!!!\n\n",
+                    ( unsigned int ) ( ( uint8_t * ) canonicalContext.pBufCur - canonicalContext.pBufProcessing ),
+                    canonicalContext.pBufProcessing );
+
 
         authPrefixLen = *authBufLen;
         returnStatus = generateAuthorizationValuePrefix( pParams,
@@ -3250,6 +3254,7 @@ SigV4Status_t SigV4_GenerateHTTPAuthorization( const SigV4Parameters_t * pParams
         hmacContext.pCryptoInterface = pParams->pCryptoInterface;
         signingKey.pData = canonicalContext.pBufCur;
         signingKey.dataLen = canonicalContext.bufRemaining;
+        fprintf(stderr, "sigv4 signingKey#1=%.*s!!!\n\n", (int) signingKey.dataLen, signingKey.pData);
         returnStatus = generateSigningKey( pParams,
                                            &hmacContext,
                                            &signingKey,
@@ -3261,6 +3266,7 @@ SigV4Status_t SigV4_GenerateHTTPAuthorization( const SigV4Parameters_t * pParams
     if( returnStatus == SigV4Success )
     {
         bufferLen = canonicalContext.pBufCur - ( char * ) canonicalContext.pBufProcessing;
+        fprintf(stderr, "sigv4 signingKey#2=%.*s!!!\n\n", (int) signingKey.dataLen, signingKey.pData);
         returnStatus = ( completeHmac( &hmacContext,
                                        signingKey.pData,
                                        signingKey.dataLen,
