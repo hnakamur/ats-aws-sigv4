@@ -37,8 +37,8 @@ SHLIBS = objs/libgenawssigv4.so
 build: $(SHLIBS)
 
 install: $(SHLIBS)
-	sudo install $(SHLIBS) /usr/lib/x86_64-linux-gnu/
-	sudo install $(LUA_FILES) /usr/local/share/lua/5.1/
+	install -D -t $(DESTDIR)$(PREFIX)/$(MULTILIB)/ $(SHLIBS)
+	install -D -t $(DESTDIR)$(PREFIX)/share/luajit-2.1.0-beta3/ $(LUA_FILES)
 
 objs/libgenawssigv4.so: $(OBJS)
 	 $(LINK) -o $@ $^ -shared $(LDFLAGS)
@@ -60,3 +60,7 @@ objs/aws-sigv4/sigv4_quicksort.o: dep/aws-sigv4/sigv4_quicksort.c $(AWS_SIG_V4_H
 
 clean:
 	@rm -rf objs
+
+distclean: clean
+
+.PHONY: install clean distclean
