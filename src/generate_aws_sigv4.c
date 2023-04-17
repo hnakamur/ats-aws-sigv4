@@ -109,6 +109,6 @@ void sprint_iso8601_date(char *out, time_t utc_time)
 
     p = gmtime_r(&utc_time, &tm);
     snprintf(out, sizeof("YYYYmmDDTHHMMSSZ"), "%04d%02d%02dT%02d%02d%02dZ",
-             1900 + p->tm_year, p->tm_mon, p->tm_mday, p->tm_hour, p->tm_min,
+             1900 + p->tm_year, p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min,
              p->tm_sec);
 }
