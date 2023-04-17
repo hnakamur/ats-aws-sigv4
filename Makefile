@@ -1,10 +1,10 @@
-CC =       clang
+CC =       cc
 LINK =     $(CC)
 COV =      llvm-cov
 PROFDATA = llvm-profdata
 
 INCS = -Isrc -Idep/aws-sigv4/include
-WARNING_FLAGS = -Wall -Wno-unused-value -Wno-unused-function -Wno-nullability-completeness -Wno-expansion-to-defined -Werror=implicit-function-declaration -Werror=incompatible-pointer-types
+WARNING_FLAGS = -Wall -Wno-unused-value -Wno-unused-function -Wno-nullability-completeness -Wno-expansion-to-defined -Werror=implicit-function-declaration -Werror=incompatible-pointer-types -Wno-format-truncation
 COMMON_CFLAGS = $(INCS) -pipe $(WARNING_FLAGS)
 COV_FLAGS = -fprofile-instr-generate -fcoverage-mapping
 
