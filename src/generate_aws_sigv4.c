@@ -74,7 +74,7 @@ int generate_aws_sigv4(generate_aws_sigv4_params_t *param)
         .pHttpMethod = param->method,
         .httpMethodLen = param->method_len,
         /* None of the requests parameters below are pre-canonicalized */
-        .flags = SIGV4_HTTP_PAYLOAD_IS_HASH,
+        .flags = SIGV4_HTTP_PATH_IS_CANONICAL_FLAG | SIGV4_HTTP_PAYLOAD_IS_HASH,
         .pPath = param->url_path,
         .pathLen = param->url_path_len,
         /* AWS S3 request does not require any Query parameters. */
