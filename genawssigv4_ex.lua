@@ -1,12 +1,13 @@
 local genawssigv4 = require "genawssigv4"
 
+print(string.format("escaped path=[%s]", genawssigv4.escape_uri_path("/aA0-._~!$&'()*+,;=:@/\t%日")))
+
 local date_iso8601 = genawssigv4.format_iso8601_date(os.time())
 local access_key_id = 'foo'
 local secret_access_key = 'bar'
 local region = 'jp-north-1'
 local method = 'GET'
-local url_path = "/日本語/ですね.txt"
--- local url_path = "/%E6%97%A5%E6%9C%AC%E8%AA%9E/%E3%81%A7%E3%81%99%E3%81%AD.txt"
+local url_path = genawssigv4.escape_uri_path("/日本語/ですね.txt")
 local query = ''
 local header_fields = {
     'host:example.com',
